@@ -1,43 +1,104 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Debugger;
 
 namespace GameLogic
 {
 	[Serializable]
 	public struct ViewParams
 	{
-		[Header("ÊÓ½ÇÒÆ¶¯ºÄÊ±")] public float totalTime;
+		[Header("Slider Cost Time")] public float totalTime;
 	}
 
-	public class View
+	public class View : MonoBehaviour
 	{
-		public Transform _camPos;
+		[SerializeField]
+		private Transform _camPos;
 
+		[SerializeField]
 		private List<ViewHit> _viewHits;
 
+		[SerializeField]
 		private ViewParams _viewParams;
+
+		[SerializeField]
+		private PlayerCamera playerCamera;
 
 		private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-		public View(Transform camPos, List<ViewHit> viewHits, ViewParams viewParams)
-		{
-			_camPos = camPos;
-			_viewHits = viewHits;
-			_viewParams = viewParams;
-		}
+		[SerializeField]
+		private int layer;
 
-		public void Start()
+		private void Start()
 		{
-
+			StartCheckHit();
 		}
 
 		#region Hit
 
+		private void StartCheckHit()
+		{
+			CheckPlayerClick().ForEachAsync((delta) => 
+			{
+				if(delta.Item1 == true)
+				{
+					TempDebug.Log("Get Mouse Clicked");
 
+					// Have Clicked
+					Ray ray = playerCamera.cam.ScreenPointToRay(delta.Item2);
+					TempDebug.Log(ray.ToString());
+					playerCamera.ray = ray;
+
+					// Raycast Check
+					int layerMask = ~layer;
+					RaycastHit[] raycastHits = new RaycastHit[1];
+					if(Physics.RaycastNonAlloc(ray, raycastHits, Mathf.Infinity, layerMask) > 0)
+					{
+						TempDebug.Log("Raycast Successfully");
+
+						var hit = raycastHits[0].transform;
+						_viewHits.ForEach((ViewHit v) => 
+						{
+							if(v.transform == hit)
+							{
+								TempDebug.Log("Hit Event Invoke");
+
+								v.hitEvent.Invoke();
+							}
+						});
+					}
+				}
+			}, this.GetCancellationTokenOnDestroy()).Forget();
+		}
+
+		private IUniTaskAsyncEnumerable<(bool, Vector3)> CheckPlayerClick()
+		{
+			return UniTaskAsyncEnumerable.Create<(bool, Vector3)>(async (writer, token) =>
+			{
+				await UniTask.Yield();
+				while(!token.IsCancellationRequested)
+				{
+					await writer.YieldAsync((GetClicked(), GetMousePosition()));
+					await UniTask.Yield();
+				}
+			});
+		}
+
+		private bool GetClicked()
+		{
+			return Input.GetMouseButtonDown(0);
+		}
+
+		private Vector3 GetMousePosition()
+		{
+			var pos = playerCamera.MainCameraMousePosToLevelCameraMousePos();
+			return pos;
+		}
 
 		#endregion
 
@@ -49,8 +110,15 @@ namespace GameLogic
 			await MoveSliderAsync(fromView._camPos.position, toView._camPos.position, playerCamera, 1.0f, token);
 		}
 
-		public async UniTaskVoid MoveTo(View toView, PlayerCamera playerCamera)
+		public async UniTaskVoid MoveTo(View toView)
 		{
+			// old view activate
+			this.gameObject.SetActive(false);
+
+			// new view disactivate
+			toView.gameObject.SetActive(true);
+
+			// async move slider
 			var token = _cancellationTokenSource.Token;
 			await MoveSliderAsync(this._camPos.position, toView._camPos.position, playerCamera, _viewParams.totalTime, token);
 		}
