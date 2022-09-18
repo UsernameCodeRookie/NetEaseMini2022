@@ -1,0 +1,21 @@
+用摄像机画面渲染纹理：RenderTexture
+多图层场景：RawImage / Sprite
+异步切换：UniTask
+场景互动：UGUI / RayCast ?
+
+GameSettingManager
+
+GlobalAssetConfig Instance {get; set;} = null;
+
+class View
+{
+	GameObject cameraPos;
+	ViewItem[] viewItems;
+
+	static async UnitaskVoid Move(View fromView, View toView, float t);
+}
+
+class ViewItem
+{
+	
+}
