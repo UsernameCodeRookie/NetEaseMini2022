@@ -27,12 +27,9 @@ namespace GameLogic
 		private ViewParams _viewParams;
 
 		[SerializeField]
-		private PlayerCamera playerCamera;
+		private PlayerCamera _playerCamera;
 
 		private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
-		[SerializeField]
-		private int layer;
 
 		private void Start()
 		{
@@ -50,19 +47,18 @@ namespace GameLogic
 					TempDebug.Log("Get Mouse Clicked");
 
 					// Have Clicked
-					Ray ray = playerCamera.cam.ScreenPointToRay(delta.Item2);
+					Ray ray = _playerCamera.cam.ScreenPointToRay(delta.Item2);
 					TempDebug.Log(ray.ToString());
-					playerCamera.ray = ray;
 
 					// Raycast Check
-					int layerMask = ~layer;
+					int layerMask = 1 << _playerCamera.layerMask;
 					RaycastHit[] raycastHits = new RaycastHit[1];
 					if(Physics.RaycastNonAlloc(ray, raycastHits, Mathf.Infinity, layerMask) > 0)
 					{
 						TempDebug.Log("Raycast Successfully");
 
 						var hit = raycastHits[0].transform;
-						_viewHits.ForEach((ViewHit v) => 
+						/*_viewHits.ForEach((ViewHit v) => 
 						{
 							if(v.transform == hit)
 							{
@@ -70,7 +66,12 @@ namespace GameLogic
 
 								v.hitEvent.Invoke();
 							}
-						});
+						});*/
+						var viewhit = hit.GetComponent<ViewHit>();
+						if (viewhit)
+						{
+							viewhit.hitEvent.Invoke();
+						}
 					}
 				}
 			}, this.GetCancellationTokenOnDestroy()).Forget();
@@ -96,7 +97,7 @@ namespace GameLogic
 
 		private Vector3 GetMousePosition()
 		{
-			var pos = playerCamera.MainCameraMousePosToLevelCameraMousePos();
+			var pos = _playerCamera.MainCameraMousePosToLevelCameraMousePos();
 			return pos;
 		}
 
@@ -117,10 +118,11 @@ namespace GameLogic
 
 			// new view disactivate
 			toView.gameObject.SetActive(true);
+			_playerCamera.curView = toView;
 
 			// async move slider
 			var token = _cancellationTokenSource.Token;
-			await MoveSliderAsync(this._camPos.position, toView._camPos.position, playerCamera, _viewParams.totalTime, token);
+			await MoveSliderAsync(this._camPos.position, toView._camPos.position, _playerCamera, _viewParams.totalTime, token);
 		}
 
 		private static async UniTask MoveSliderAsync
@@ -140,6 +142,15 @@ namespace GameLogic
 				playerCamera.MovePosTo(newPos);
 			}
 		}
+		#endregion
+
+		#region Util
+
+		public Vector3 GetCameraPosition()
+		{
+			return _camPos.position;
+		}
+
 		#endregion
 	}
 }

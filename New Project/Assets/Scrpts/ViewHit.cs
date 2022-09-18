@@ -10,6 +10,5 @@ namespace GameLogic
         [SerializeField]
         public UnityEvent hitEvent;
 
-
     }
 }

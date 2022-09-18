@@ -14,11 +14,23 @@ namespace GameLogic
         [DoNotSerialize]
         public Camera cam;
 
+        [SerializeField]
+        public View curView;
+
+        [SerializeField]
+        public int layerMask;
+
         //public Ray ray;
 
         private void Start()
         {
             cam = GetComponent<Camera>();
+            if(curView)
+            {
+                // Start First View
+                cam.transform.position = curView.GetCameraPosition();
+                curView.gameObject.SetActive(true);
+            }
         }
 
         private void Update()

@@ -351,13 +351,13 @@ GameObject:
   m_Component:
   - component: {fileID: 62701680}
   - component: {fileID: 62701681}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: View 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &62701680
 Transform:
   m_ObjectHideFlags: 0
@@ -387,10 +387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a97cc85b80b47b4b9fce05add56ab05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camPos: {fileID: 0}
+  _camPos: {fileID: 1658096257}
   _viewHits: []
   _viewParams:
-    totalTime: 0
+    totalTime: 1
+  _playerCamera: {fileID: 1375568643}
 --- !u!1 &389778415
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,13 +569,13 @@ GameObject:
   m_Component:
   - component: {fileID: 632036283}
   - component: {fileID: 632036284}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: View 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &632036283
 Transform:
   m_ObjectHideFlags: 0
@@ -603,10 +604,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a97cc85b80b47b4b9fce05add56ab05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camPos: {fileID: 0}
+  _camPos: {fileID: 1366691819}
   _viewHits: []
   _viewParams:
-    totalTime: 0
+    totalTime: 1
+  _playerCamera: {fileID: 1375568643}
 --- !u!1 &918354892
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,8 +618,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 918354893}
-  - component: {fileID: 918354894}
-  m_Layer: 0
+  - component: {fileID: 918354895}
+  - component: {fileID: 918354896}
+  m_Layer: 6
   m_Name: ViewHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -632,14 +635,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918354892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 16.84, y: 3.29, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62701680}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &918354894
+--- !u!135 &918354895
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918354892}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &918354896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -648,12 +664,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 918354892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0b9cdf2cfca586458e0431f26b3796d, type: 3}
+  m_Script: {fileID: 11500000, guid: b3a6dc5e5aa08dd4bb6a7d227278cc5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hitEvent:
     m_PersistentCalls:
       m_Calls: []
+  fromView: {fileID: 62701681}
+  toView: {fileID: 632036284}
 --- !u!1 &1161479972
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,7 +750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1183345258}
   - component: {fileID: 1183345259}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -795,7 +813,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 566328c07acb81e4f8f65ef59969126f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e79d5858d7e29cd46b0b9dc93365ba96, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -815,7 +833,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1366691819}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CamPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -829,8 +847,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1366691818}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.41, y: 0, z: -4.71}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.24, y: 3, z: -4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -848,7 +866,7 @@ GameObject:
   - component: {fileID: 1375568646}
   - component: {fileID: 1375568645}
   - component: {fileID: 1375568643}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -867,6 +885,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626a9fb89779c6c449d479be577588ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rect: {fileID: 548447140}
+  cam: {fileID: 0}
+  curView: {fileID: 62701681}
+  layerMask: 0
 --- !u!20 &1375568645
 Camera:
   m_ObjectHideFlags: 0
@@ -892,7 +914,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 80.6
+  field of view: 115
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -918,7 +940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375568642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 8.61, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1014,7 +1036,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1658096257}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CamPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1028,8 +1050,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658096256}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.61, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1045,7 +1067,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1726368593}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1100,8 +1122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca022728e48201a42a1c9a69ebce039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view1: {fileID: 0}
-  view2: {fileID: 0}
+  view1: {fileID: 62701681}
+  view2: {fileID: 632036284}
   playerCamera: {fileID: 1375568643}
 --- !u!4 &1786021373
 Transform:
