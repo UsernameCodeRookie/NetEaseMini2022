@@ -12,11 +12,13 @@ namespace GL
 
         private Camera _camera;
 
+        public PlayerCamera playerCamera;
+
 
         private void Start()
         {
             _camera = GetComponent<Camera>();
-            PlayerCamera playerCamera = new PlayerCamera(_rect, _camera, _layer);
+            playerCamera = new PlayerCamera(_rect, _camera, _layer);
             playerCamera.Init();
         }
     }
