@@ -15,23 +15,26 @@ namespace GameLogic
 		[Header("Slider Cost Time")] public float totalTime;
 	}
 
-	public class View : MonoBehaviour
+	public class View
 	{
-		[SerializeField]
 		private Transform _camPos;
 
-		[SerializeField]
-		private List<ViewHit> _viewHits;
-
-		[SerializeField]
 		private ViewParams _viewParams;
 
-		[SerializeField]
 		private PlayerCamera _playerCamera;
+		public GameObject _gameObject { get; set; }
 
 		private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-		private void Start()
+		public View(Transform camPos, ViewParams viewParams, PlayerCamera playerCamera, GameObject gameObject)
+		{
+			_camPos = camPos;
+			_viewParams = viewParams;
+			_playerCamera = playerCamera;
+			_gameObject = gameObject;
+		}
+
+		public void Start()
 		{
 			StartCheckHit();
 		}
@@ -74,7 +77,7 @@ namespace GameLogic
 						}
 					}
 				}
-			}, this.GetCancellationTokenOnDestroy()).Forget();
+			}, _gameObject.GetCancellationTokenOnDestroy()).Forget();
 		}
 
 		private IUniTaskAsyncEnumerable<(bool, Vector3)> CheckPlayerClick()
@@ -114,11 +117,24 @@ namespace GameLogic
 		public async UniTaskVoid MoveTo(View toView)
 		{
 			// old view activate
-			this.gameObject.SetActive(false);
+			this.SetGameObjectActive(false);
 
 			// new view disactivate
-			toView.gameObject.SetActive(true);
+			toView.SetGameObjectActive(true);
 			_playerCamera.curView = toView;
+
+			// async move slider
+			var token = _cancellationTokenSource.Token;
+			await MoveSliderAsync(this._camPos.position, toView._camPos.position, _playerCamera, _viewParams.totalTime, token);
+		}
+
+		public async UniTaskVoid MoveTo(ViewSample toViewSample)
+		{
+			// old view activate
+			this.SetGameObjectActive(false);
+
+			// new view disactivate
+			var toView = SetActiveAndReturnView(toViewSample, _playerCamera);
 
 			// async move slider
 			var token = _cancellationTokenSource.Token;
@@ -149,6 +165,21 @@ namespace GameLogic
 		public Vector3 GetCameraPosition()
 		{
 			return _camPos.position;
+		}
+
+		public void SetGameObjectActive(bool value)
+		{
+			_gameObject.SetActive(value);
+		}
+
+		public static View SetActiveAndReturnView(ViewSample viewSample, PlayerCamera playerCamera)
+		{
+			viewSample.gameObject.SetActive(true);
+			viewSample.Init();
+			var view = viewSample.view;
+			playerCamera.curView = view;
+
+			return view;
 		}
 
 		#endregion

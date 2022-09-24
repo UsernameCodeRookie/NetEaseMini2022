@@ -10,5 +10,10 @@ namespace GameLogic
         [SerializeField]
         public UnityEvent hitEvent;
 
+        public virtual void hitFunc()
+        {
+
+        }
+
     }
 }

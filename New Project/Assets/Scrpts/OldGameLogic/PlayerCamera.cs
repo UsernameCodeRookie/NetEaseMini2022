@@ -15,21 +15,24 @@ namespace GameLogic
         public Camera cam;
 
         [SerializeField]
-        public View curView;
+        private ViewSample curViewSample;
 
         [SerializeField]
         public int layerMask;
 
-        //public Ray ray;
+		public View curView;
 
-        private void Start()
+		//public Ray ray;
+
+		private void Start()
         {
+            curView = View.SetActiveAndReturnView(curViewSample, this);
+
             cam = GetComponent<Camera>();
-            if(curView)
+            if(curView != null)
             {
                 // Start First View
                 cam.transform.position = curView.GetCameraPosition();
-                curView.gameObject.SetActive(true);
             }
         }
 
